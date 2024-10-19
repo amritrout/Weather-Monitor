@@ -16,4 +16,10 @@ public interface WeatherDataRepository extends JpaRepository<WeatherData, Long> 
             "FROM WeatherData w WHERE w.city = :city AND w.date = :date " +
             "GROUP BY w.mainCondition ORDER BY COUNT(w.mainCondition) DESC")
     List<Object[]> calculateWeatherSummary(@Param("city") String city, @Param("date") LocalDate date);
+
+    @Query("SELECT w FROM WeatherData w WHERE w.city = :city ORDER BY w.date DESC")
+    List<WeatherData> findLatestWeatherData(@Param("city") String city);
+
+    @Query("SELECT w FROM WeatherData w WHERE w.city = :city ORDER BY w.date DESC")
+    List<WeatherData> findAllWeatherData(@Param("city") String city);
 }
