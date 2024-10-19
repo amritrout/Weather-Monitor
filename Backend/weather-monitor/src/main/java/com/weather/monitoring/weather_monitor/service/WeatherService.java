@@ -28,6 +28,9 @@ public class WeatherService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private AlertService alertService;
+
     @Value("${WEATHER_API}")
     private String apiKey;
 
@@ -45,6 +48,8 @@ public class WeatherService {
             List<Map<String, Object>> weatherList = (List<Map<String, Object>>) response.get("weather");
             String mainCondition = weatherList.isEmpty() ? "Unknown" : (String) weatherList.get(0).get("main");
 
+
+
             double tempCelsius = tempKelvin - 273.15;
             double feelsLikeCelsius = feelsLikeKelvin - 273.15;
 
@@ -59,6 +64,8 @@ public class WeatherService {
             weatherData.setDate(date);
 
             weatherDataRepository.save(weatherData);
+
+            alertService.checkForAlerts(city,tempCelsius);
         }
     }
 
