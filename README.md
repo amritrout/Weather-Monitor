@@ -112,8 +112,7 @@ during testing.
 ```java
 Trigger summaryTrigger = TriggerBuilder.newTrigger()
  .withIdentity("summaryTrigger", "group2")
- .withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 50)) // Set this closer to current
-time for testing
+ .withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 50)) // Set this closer to current time for testing
  .build();
 ```
 Adjust the `dailyAtHourAndMinute()` values to match a time close to your current time if you'd like to
