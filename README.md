@@ -119,7 +119,28 @@ Adjust the `dailyAtHourAndMinute()` values to match a time close to your current
 calculate the daily summary up to this point during testing.
 By setting these intervals to a smaller time frame, you'll be able to observe the summary and
 weather updates more frequently in the frontend during development and testing.
-   
+
+# Adding More Cities to Weather Monitoring
+
+Currently, the backend is set to fetch the weather data for the following cities at regular intervals:
+
+- Delhi
+- Mumbai
+- Chennai
+- Bangalore
+- Kolkata
+- Hyderabad
+
+### To add more cities:
+
+1. Navigate to the file:
+   src/main/java/com/weather/monitoring/weather_monitor/scheduler/WeatherJob.java
+
+2. Update the cities in the following string:
+```java
+String[] cities = {"Delhi", "Mumbai", "Chennai", "Bangalore", "Kolkata", "Hyderabad"};
+ ```  
+
 # Project Demo images
 <details>
 <summary>Click here to check project Demo</summary>
