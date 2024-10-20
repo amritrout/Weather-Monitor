@@ -12,7 +12,7 @@ const Alerts = () => {
     const fetchAlerts = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`/alerts`);
+            const response = await axios.get(`/alerts`); // Endpoint adjusted to match your backend
             setAlerts(response.data);
         } catch (error) {
             console.error('Error fetching alerts:', error);
@@ -32,7 +32,7 @@ const Alerts = () => {
                         alerts.map((alert, index) => (
                             <div key={index}>
                                 <p>City: {alert.city}</p>
-                                <p>Temperature Threshold: {alert.temperatureThreshold}</p>
+                                <p>Temperature Threshold: {alert.temperatureThreshold}°{alert.temperatureUnit}</p>
                                 <p>Consecutive Updates: {alert.consecutiveUpdatesThreshold}</p>
                             </div>
                         ))

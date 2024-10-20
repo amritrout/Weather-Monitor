@@ -11,8 +11,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
-
 import java.util.List;
 import java.util.Map;
 
@@ -48,24 +48,25 @@ public class WeatherService {
             List<Map<String, Object>> weatherList = (List<Map<String, Object>>) response.get("weather");
             String mainCondition = weatherList.isEmpty() ? "Unknown" : (String) weatherList.get(0).get("main");
 
-
-
             double tempCelsius = tempKelvin - 273.15;
             double feelsLikeCelsius = feelsLikeKelvin - 273.15;
 
             WeatherData weatherData = new WeatherData();
             weatherData.setCity(city);
-            weatherData.setTemperature(tempCelsius);
-            weatherData.setFeelsLike(feelsLikeCelsius);
+            weatherData.setTemperatureCelsius(tempCelsius);
+            weatherData.setFeelsLikeCelsius(feelsLikeCelsius);
+            weatherData.setTemperatureFahrenheit((tempCelsius * 9 / 5) + 32);
+            weatherData.setFeelsLikeFahrenheit((feelsLikeCelsius * 9 / 5) + 32);
             weatherData.setMainCondition(mainCondition);
 
             long timestamp = ((Number) response.get("dt")).longValue();
             LocalDate date = Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
             weatherData.setDate(date);
+            weatherData.setTime(LocalTime.now());
 
             weatherDataRepository.save(weatherData);
 
-            alertService.checkForAlerts(city,tempCelsius);
+            alertService.checkForAlerts(city, tempCelsius,"C");
         }
     }
 
@@ -78,17 +79,25 @@ public class WeatherService {
 
         Object[] summaryData = weatherSummary.get(0);
 
-        double averageTemperature = (Double) summaryData[0];
-        double maxTemperature = (Double) summaryData[1];
-        double minTemperature = (Double) summaryData[2];
-        String dominantCondition = (String) summaryData[3];
+        double averageTemperatureCelsius = (Double) summaryData[0];
+        double maxTemperatureCelsius = (Double) summaryData[1];
+        double minTemperatureCelsius = (Double) summaryData[2];
+        String dominantCondition = (String) summaryData[6];
+
+        double averageTemperatureFahrenheit = (Double) summaryData[3];
+        double maxTemperatureFahrenheit = (Double) summaryData[4];
+        double minTemperatureFahrenheit = (Double) summaryData[5];
 
         DailyWeatherSummary summary = new DailyWeatherSummary();
         summary.setCity(city);
         summary.setDate(date);
-        summary.setAverageTemperature(averageTemperature);
-        summary.setMaxTemperature(maxTemperature);
-        summary.setMinTemperature(minTemperature);
+        summary.setAverageTemperatureCelsius(averageTemperatureCelsius);
+        summary.setMaxTemperatureCelsius(maxTemperatureCelsius);
+        summary.setMinTemperatureCelsius(minTemperatureCelsius);
+
+        summary.setAverageTemperatureFahrenheit(averageTemperatureFahrenheit);
+        summary.setMaxTemperatureFahrenheit(maxTemperatureFahrenheit);
+        summary.setMinTemperatureFahrenheit(minTemperatureFahrenheit);
         summary.setDominantCondition(dominantCondition);
 
         dailyWeatherSummaryRepository.save(summary);

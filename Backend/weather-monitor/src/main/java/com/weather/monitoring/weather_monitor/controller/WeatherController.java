@@ -39,19 +39,26 @@ public class WeatherController {
     public String setThreshold(
             @RequestParam String city,
             @RequestParam double temperatureThreshold,
+            @RequestParam String temperatureUnit,
             @RequestParam int consecutiveUpdatesThreshold) {
+
+        if (!temperatureUnit.equals("C") && !temperatureUnit.equals("F")) {
+            return "Invalid temperature unit. Please use 'C' for Celsius or 'F' for Fahrenheit.";
+        }
 
         AlertThreshold alertThreshold = new AlertThreshold();
         alertThreshold.setCity(city);
         alertThreshold.setTemperatureThreshold(temperatureThreshold);
+        alertThreshold.setTemperatureUnit(temperatureUnit);
         alertThreshold.setConsecutiveUpdatesThreshold(consecutiveUpdatesThreshold);
 
         alertThresholdRepository.save(alertThreshold);
 
         return "Alert threshold set for " + city + ": " +
-                "Temperature > " + temperatureThreshold +
+                "Temperature > " + temperatureThreshold + " " + temperatureUnit +
                 " for " + consecutiveUpdatesThreshold + " consecutive updates.";
     }
+
 
     @GetMapping("/listThresholds")
     public List<AlertThreshold> listThresholds() {
@@ -75,15 +82,13 @@ public class WeatherController {
             @RequestParam String city,
             @RequestParam(required = false) String date) {
         LocalDate queryDate = (date != null) ? LocalDate.parse(date) : LocalDate.now();
+
         return dailyWeatherSummaryRepository.findByCityAndDate(city, queryDate);
     }
 
-    @GetMapping("/weatherHistory")
-    public List<DailyWeatherSummary> getWeatherHistory(
-            @RequestParam String city,
-            @RequestParam(defaultValue = "0") int days) {
-        LocalDate startDate = LocalDate.now().minusDays(days);
-        return dailyWeatherSummaryRepository.findByCityAndDate(city, startDate);
+    @GetMapping("/weatherHistorybyCity")
+    public List<DailyWeatherSummary> getWeatherHistory(@RequestParam String city) {
+        return dailyWeatherSummaryRepository.findByCity(city);
     }
 
     @GetMapping("/alerts")
@@ -101,4 +106,6 @@ public class WeatherController {
     public List<WeatherData> getAllWeatherData(@RequestParam String city) {
         return weatherDataRepository.findAllWeatherData(city);
     }
+
+
 }

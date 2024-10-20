@@ -1,9 +1,6 @@
 package com.weather.monitoring.weather_monitor.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +17,6 @@ public class AlertThreshold {
 
     private String city;
     private double temperatureThreshold;
+    private String temperatureUnit; // "C" for Celsius or "F" for Fahrenheit
     private int consecutiveUpdatesThreshold;
 }

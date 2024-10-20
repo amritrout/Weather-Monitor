@@ -11,4 +11,6 @@ import java.util.List;
 public interface DailyWeatherSummaryRepository extends JpaRepository<DailyWeatherSummary, Long> {
 
     List<DailyWeatherSummary> findByCityAndDate(String city, LocalDate date);
+
+    List<DailyWeatherSummary> findByCity(String city);
 }

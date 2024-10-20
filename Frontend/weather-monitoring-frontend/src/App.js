@@ -2,18 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import WeatherSummary from './components/WeatherSummary';
-import WeatherHistory from './components/WeatherHistory';
 import Alerts from './components/Alerts';
 import ThresholdForm from './components/ThresholdForm';
 import ThresholdList from './components/ThresholdList';
-import CurrentWeather from './components/CurrentWeather'; // Import the new component
-import WeatherChart from './components/WeatherChart'; // Import WeatherChart component
-import './App.css'; // Make sure to import the CSS
+import CurrentWeather from './components/CurrentWeather';
+import WeatherChart from './components/WeatherChart';
+import './App.css';
 
 function App() {
     const [thresholds, setThresholds] = useState([]);
-    const [currentWeatherData, setCurrentWeatherData] = useState([]); // State to hold current weather data
-    const [city, setCity] = useState(''); // State to hold the input city name
+    const [currentWeatherData, setCurrentWeatherData] = useState([]);
+    const [city, setCity] = useState('');
 
     useEffect(() => {
         fetchThresholds();
@@ -60,9 +59,7 @@ function App() {
 
             <div>
                 <WeatherSummary/>
-                <hr/>
-                <WeatherHistory/>
-                <hr/>
+
                 <Alerts/>
                 <hr/>
 

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -19,7 +20,10 @@ public class WeatherData {
 
     private String city;
     private LocalDate date;
-    private double temperature;
-    private double feelsLike;
+    private LocalTime time;
+    private double temperatureCelsius;
+    private double feelsLikeCelsius;
+    private double temperatureFahrenheit;
+    private double feelsLikeFahrenheit;
     private String mainCondition;
 }

@@ -1,4 +1,3 @@
-// src/components/ThresholdList.js
 import React from 'react';
 
 const ThresholdList = ({ thresholds, onDeleteThreshold }) => {
@@ -12,7 +11,7 @@ const ThresholdList = ({ thresholds, onDeleteThreshold }) => {
                     {thresholds.map((threshold) => (
                         <li key={threshold.id}>
                             {threshold.city}:
-                            Temperature > {threshold.temperatureThreshold}°C for {threshold.consecutiveUpdatesThreshold} updates.
+                            Temperature > {threshold.temperatureThreshold}°{threshold.temperatureUnit} for {threshold.consecutiveUpdatesThreshold} updates.
                             <button onClick={() => onDeleteThreshold(threshold.id)}>Delete</button>
                         </li>
                     ))}

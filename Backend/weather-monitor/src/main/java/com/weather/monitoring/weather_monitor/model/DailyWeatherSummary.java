@@ -19,9 +19,12 @@ public class DailyWeatherSummary {
 
     private String city;
     private LocalDate date;
-    private double averageTemperature;
-    private double maxTemperature;
-    private double minTemperature;
-    private String dominantCondition;
+    private double averageTemperatureCelsius;
+    private double averageTemperatureFahrenheit;
+    private double maxTemperatureCelsius;
+    private double maxTemperatureFahrenheit;
+    private double minTemperatureCelsius;
+    private double minTemperatureFahrenheit;
+    private String DominantCondition;
 
 }
