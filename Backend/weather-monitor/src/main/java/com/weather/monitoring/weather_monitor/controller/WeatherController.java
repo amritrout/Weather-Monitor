@@ -2,11 +2,13 @@ package com.weather.monitoring.weather_monitor.controller;
 
 import com.weather.monitoring.weather_monitor.model.AlertThreshold;
 import com.weather.monitoring.weather_monitor.model.DailyWeatherSummary;
+import com.weather.monitoring.weather_monitor.model.TriggeredAlert;
 import com.weather.monitoring.weather_monitor.model.WeatherData;
 import com.weather.monitoring.weather_monitor.repository.WeatherDataRepository;
 import com.weather.monitoring.weather_monitor.service.WeatherService;
 import com.weather.monitoring.weather_monitor.repository.AlertThresholdRepository;
 import com.weather.monitoring.weather_monitor.repository.DailyWeatherSummaryRepository;
+import com.weather.monitoring.weather_monitor.repository.TriggeredAlertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +30,9 @@ public class WeatherController {
 
     @Autowired
     private WeatherDataRepository weatherDataRepository;
+
+    @Autowired
+    private TriggeredAlertRepository triggeredAlertRepository;
 
     @GetMapping("/fetchWeather")
     public String fetchWeather(@RequestParam String city) {
@@ -58,7 +63,6 @@ public class WeatherController {
                 "Temperature > " + temperatureThreshold + " " + temperatureUnit +
                 " for " + consecutiveUpdatesThreshold + " consecutive updates.";
     }
-
 
     @GetMapping("/listThresholds")
     public List<AlertThreshold> listThresholds() {
@@ -96,6 +100,16 @@ public class WeatherController {
         return alertThresholdRepository.findAll();
     }
 
+    @GetMapping("/triggeredAlertsbyCity")
+    public List<TriggeredAlert> getTriggeredAlerts(@RequestParam String city) {
+        return triggeredAlertRepository.findByCity(city);
+    }
+
+    @GetMapping("/triggeredAlerts")
+    public List<TriggeredAlert> getTriggeredAlerts() {
+        return triggeredAlertRepository.findAll();
+    }
+
     @GetMapping("/currentWeather")
     public List<WeatherData> getCurrentWeather(@RequestParam String city) {
         weatherService.fetchAndSaveWeatherData(city);
@@ -106,6 +120,4 @@ public class WeatherController {
     public List<WeatherData> getAllWeatherData(@RequestParam String city) {
         return weatherDataRepository.findAllWeatherData(city);
     }
-
-
 }

@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, LineElement, PointElement, LinearScale, TimeScale, CategoryScale, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, LineElement, PointElement, LinearScale, TimeScale,
+    CategoryScale, Tooltip, Legend, } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import 'chartjs-adapter-date-fns';
 import axios from 'axios';
 
-ChartJS.register(LineElement, PointElement, LinearScale, TimeScale, CategoryScale, Tooltip, Legend, zoomPlugin);
+ChartJS.register(LineElement, PointElement, LinearScale, TimeScale, CategoryScale,
+    Tooltip, Legend, zoomPlugin);
 
 const WeatherChart = ({ weatherData }) => {
     const [unit, setUnit] = useState('C');
     const [dataType, setDataType] = useState('today');
     const [historicalData, setHistoricalData] = useState([]);
+    const [triggeredAlerts, setTriggeredAlerts] = useState([]);
     const [city, setCity] = useState('Chennai');
 
     useEffect(() => {
         if (dataType === 'history') {
             fetchHistoricalData(city);
+        } else if (dataType === 'alerts') {
+            fetchTriggeredAlerts(city);
         }
     }, [dataType, city]);
 
@@ -25,6 +30,16 @@ const WeatherChart = ({ weatherData }) => {
             setHistoricalData(response.data);
         } catch (error) {
             console.error('Error fetching historical weather data:', error);
+        }
+    };
+
+    const fetchTriggeredAlerts = async (city) => {
+        try {
+            const response = await axios.get(`/triggeredAlertsbyCity`, { params: { city } });
+            console.log('Triggered Alerts Response:', response.data); // Log the response data
+            setTriggeredAlerts(response.data);
+        } catch (error) {
+            console.error('Error fetching triggered alerts:', error);
         }
     };
 
@@ -52,22 +67,19 @@ const WeatherChart = ({ weatherData }) => {
                 }
             });
 
-            Array.from(dateTimeMap.entries())
-                .sort(([a], [b]) => a - b)
-                .forEach(([_, value]) => {
-                    labels.push(value.dateTime);
-                });
-
+            // Extract labels and data from the map, ensuring consistent order
+            const sortedData = Array.from(dateTimeMap.values()).sort((a, b) => a.dateTime - b.dateTime);
+            labels = sortedData.map(v => v.dateTime);
             datasets = [
                 {
                     label: `Temperature (°${unit})`,
-                    data: Array.from(dateTimeMap.values()).map(v => v.temperature),
+                    data: sortedData.map(v => v.temperature),
                     borderColor: 'rgba(75, 192, 192, 1)',
                     tension: 0.1,
                 },
                 {
                     label: `Feels Like (°${unit})`,
-                    data: Array.from(dateTimeMap.values()).map(v => v.feelsLike),
+                    data: sortedData.map(v => v.feelsLike),
                     borderColor: 'rgba(255, 99, 132, 1)',
                     tension: 0.1,
                 }
@@ -79,21 +91,35 @@ const WeatherChart = ({ weatherData }) => {
             datasets = [
                 {
                     label: `Average Temperature (°${unit})`,
-                    data: historicalData.map(data => ({ x: new Date(data.date), y: getTemp(data, 'average') })),
+                    data: historicalData.map(data => getTemp(data, 'average')),
                     borderColor: 'rgba(75, 192, 192, 1)',
                     tension: 0.1,
                 },
                 {
                     label: `Max Temperature (°${unit})`,
-                    data: historicalData.map(data => ({ x: new Date(data.date), y: getTemp(data, 'max') })),
+                    data: historicalData.map(data => getTemp(data, 'max')),
                     borderColor: 'rgba(255, 99, 132, 1)',
                     tension: 0.1,
                 },
                 {
                     label: `Min Temperature (°${unit})`,
-                    data: historicalData.map(data => ({ x: new Date(data.date), y: getTemp(data, 'min') })),
+                    data: historicalData.map(data => getTemp(data, 'min')),
                     borderColor: 'rgba(54, 162, 235, 1)',
                     tension: 0.1,
+                }
+            ];
+        } else if (dataType === 'alerts') {
+            labels = triggeredAlerts.map(alert => new Date(alert.timestamp));
+
+            datasets = [
+                {
+                    label: `Triggered Temperature (°${unit})`,
+                    data: triggeredAlerts.map(alert => alert.triggeredTemperature),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    tension: 0.1,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
                 }
             ];
         }
@@ -102,7 +128,6 @@ const WeatherChart = ({ weatherData }) => {
     };
 
     const { labels, datasets } = prepareChartData();
-
     const data = { labels, datasets };
 
     const options = {
@@ -119,6 +144,7 @@ const WeatherChart = ({ weatherData }) => {
                 type: 'time',
                 time: {
                     unit: dataType === 'today' ? 'hour' : 'day',
+                    tooltipFormat: dataType === 'today' ? 'MMM dd, HH:mm' : 'MMM dd, yyyy',
                     displayFormats: {
                         hour: 'MMM dd, HH:mm',
                         day: 'MMM dd',
@@ -127,10 +153,6 @@ const WeatherChart = ({ weatherData }) => {
                 title: {
                     display: true,
                     text: dataType === 'today' ? 'Date and Time' : 'Date',
-                },
-                offset: true,
-                ticks: {
-                    source: 'data',
                 },
             },
         },
@@ -141,7 +163,7 @@ const WeatherChart = ({ weatherData }) => {
                         let label = `${context.dataset.label}: ${context.parsed.y.toFixed(2)}`;
                         if (dataType === 'history') {
                             const dataIndex = context.dataIndex;
-                            label += ` | Dominant Condition: ${historicalData[dataIndex].dominantCondition}`;
+                            label += ` | Dominant Condition: ${historicalData[dataIndex].DominantCondition}`;
                         }
                         return label;
                     },
@@ -185,6 +207,7 @@ const WeatherChart = ({ weatherData }) => {
                 <select value={dataType} onChange={handleDataTypeChange}>
                     <option value="today">Today's Temp Data</option>
                     <option value="history">Historical Trends</option>
+                    <option value="alerts">Triggered Alerts</option>
                 </select>
             </div>
             {dataType === 'history' && (

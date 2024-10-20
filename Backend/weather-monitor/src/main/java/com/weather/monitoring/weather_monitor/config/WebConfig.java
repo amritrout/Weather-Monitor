@@ -18,6 +18,7 @@ public class WebConfig {
         config.addAllowedHeader("*"); // Allow all headers
         config.addAllowedMethod("*"); // Allow all HTTP methods
         source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/ws/**", config);
         return new CorsFilter(source);
     }
 }
