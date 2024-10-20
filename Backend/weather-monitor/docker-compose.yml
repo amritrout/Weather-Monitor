@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: weather_db_container
+    environment:
+      MYSQL_DATABASE: weather_db
+      MYSQL_USER: myuser123
+      MYSQL_PASSWORD: root@password
+      MYSQL_ROOT_PASSWORD: root@password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
