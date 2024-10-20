@@ -11,7 +11,7 @@ ChartJS.register(LineElement, PointElement, LinearScale, TimeScale, CategoryScal
 
 const WeatherChart = ({ weatherData }) => {
     const [unit, setUnit] = useState('C');
-    const [dataType, setDataType] = useState('today');
+    const [dataType, setDataType] = useState('allTime');
     const [historicalData, setHistoricalData] = useState([]);
     const [triggeredAlerts, setTriggeredAlerts] = useState([]);
     const [city, setCity] = useState('Chennai');
@@ -36,7 +36,7 @@ const WeatherChart = ({ weatherData }) => {
     const fetchTriggeredAlerts = async (city) => {
         try {
             const response = await axios.get(`/triggeredAlertsbyCity`, { params: { city } });
-            console.log('Triggered Alerts Response:', response.data); // Log the response data
+            //console.log('Triggered Alerts Response:', response.data);
             setTriggeredAlerts(response.data);
         } catch (error) {
             console.error('Error fetching triggered alerts:', error);
@@ -51,7 +51,7 @@ const WeatherChart = ({ weatherData }) => {
         let labels = [];
         let datasets = [];
 
-        if (dataType === 'today') {
+        if (dataType === 'allTime') {
             const dateTimeMap = new Map();
 
             weatherData.forEach(data => {
@@ -67,7 +67,6 @@ const WeatherChart = ({ weatherData }) => {
                 }
             });
 
-            // Extract labels and data from the map, ensuring consistent order
             const sortedData = Array.from(dateTimeMap.values()).sort((a, b) => a.dateTime - b.dateTime);
             labels = sortedData.map(v => v.dateTime);
             datasets = [
@@ -85,7 +84,7 @@ const WeatherChart = ({ weatherData }) => {
                 }
             ];
         } else if (dataType === 'history') {
-            labels = historicalData.map(data => new Date(data.date));
+            labels = historicalData.map(data => new Date(data.date).getTime()); // Ensure the labels are timestamps
             const getTemp = (data, type) => unit === 'C' ? data[`${type}TemperatureCelsius`] : data[`${type}TemperatureFahrenheit`];
 
             datasets = [
@@ -109,7 +108,7 @@ const WeatherChart = ({ weatherData }) => {
                 }
             ];
         } else if (dataType === 'alerts') {
-            labels = triggeredAlerts.map(alert => new Date(alert.timestamp));
+            labels = triggeredAlerts.map(alert => new Date(alert.timestamp).getTime()); // Ensure the labels are timestamps
 
             datasets = [
                 {
@@ -127,6 +126,7 @@ const WeatherChart = ({ weatherData }) => {
         return { labels, datasets };
     };
 
+
     const { labels, datasets } = prepareChartData();
     const data = { labels, datasets };
 
@@ -143,8 +143,8 @@ const WeatherChart = ({ weatherData }) => {
             x: {
                 type: 'time',
                 time: {
-                    unit: dataType === 'today' ? 'hour' : 'day',
-                    tooltipFormat: dataType === 'today' ? 'MMM dd, HH:mm' : 'MMM dd, yyyy',
+                    unit: dataType === 'allTime' ? 'hour' : 'day',
+                    tooltipFormat: dataType === 'allTime' ? 'MMM dd, HH:mm' : 'MMM dd, yyyy',
                     displayFormats: {
                         hour: 'MMM dd, HH:mm',
                         day: 'MMM dd',
@@ -152,7 +152,7 @@ const WeatherChart = ({ weatherData }) => {
                 },
                 title: {
                     display: true,
-                    text: dataType === 'today' ? 'Date and Time' : 'Date',
+                    text: dataType === 'allTime' ? 'Date and Time' : 'Date',
                 },
             },
         },
@@ -205,7 +205,7 @@ const WeatherChart = ({ weatherData }) => {
             <div>
                 <label>Select Data Type: </label>
                 <select value={dataType} onChange={handleDataTypeChange}>
-                    <option value="today">Today's Temp Data</option>
+                    <option value="allTime">Temperature Data</option>
                     <option value="history">Historical Trends</option>
                     <option value="alerts">Triggered Alerts</option>
                 </select>
