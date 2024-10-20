@@ -19,6 +19,11 @@ The project is divided into two main components:
 
 ## Setup and Running
 
+Clone the Repository
+```bash
+   git clone https://github.com/amritrout/Weather-Monitor
+   ```
+
 ### Backend Setup
 
 1. Navigate to the backend directory:
