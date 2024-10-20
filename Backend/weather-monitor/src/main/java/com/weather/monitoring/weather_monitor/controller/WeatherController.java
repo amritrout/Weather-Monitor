@@ -1,14 +1,8 @@
 package com.weather.monitoring.weather_monitor.controller;
 
-import com.weather.monitoring.weather_monitor.model.AlertThreshold;
-import com.weather.monitoring.weather_monitor.model.DailyWeatherSummary;
-import com.weather.monitoring.weather_monitor.model.TriggeredAlert;
-import com.weather.monitoring.weather_monitor.model.WeatherData;
-import com.weather.monitoring.weather_monitor.repository.WeatherDataRepository;
+import com.weather.monitoring.weather_monitor.model.*;
 import com.weather.monitoring.weather_monitor.service.WeatherService;
-import com.weather.monitoring.weather_monitor.repository.AlertThresholdRepository;
-import com.weather.monitoring.weather_monitor.repository.DailyWeatherSummaryRepository;
-import com.weather.monitoring.weather_monitor.repository.TriggeredAlertRepository;
+import com.weather.monitoring.weather_monitor.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,10 +28,11 @@ public class WeatherController {
     @Autowired
     private TriggeredAlertRepository triggeredAlertRepository;
 
-    @GetMapping("/fetchWeather")
-    public String fetchWeather(@RequestParam String city) {
-        weatherService.fetchAndSaveWeatherData(city);
-        return "Weather data fetched and stored!";
+
+    @GetMapping("/currentWeather")
+    public List<WeatherData> getCurrentWeather(@RequestParam String city) {
+        weatherService.fetchAndSaveWeatherData(city,false);
+        return weatherDataRepository.findLatestWeatherData(city);
     }
 
     @PostMapping("/setThreshold")
@@ -105,19 +100,5 @@ public class WeatherController {
         return triggeredAlertRepository.findByCity(city);
     }
 
-    @GetMapping("/triggeredAlerts")
-    public List<TriggeredAlert> getTriggeredAlerts() {
-        return triggeredAlertRepository.findAll();
-    }
 
-    @GetMapping("/currentWeather")
-    public List<WeatherData> getCurrentWeather(@RequestParam String city) {
-        weatherService.fetchAndSaveWeatherData(city);
-        return weatherDataRepository.findLatestWeatherData(city);
-    }
-
-    @GetMapping("/allWeatherData")
-    public List<WeatherData> getAllWeatherData(@RequestParam String city) {
-        return weatherDataRepository.findAllWeatherData(city);
-    }
 }

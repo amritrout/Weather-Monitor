@@ -36,7 +36,7 @@ public class WeatherService {
 
     private static final String API_URL = "https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}";
 
-    public void fetchAndSaveWeatherData(String city) {
+    public void fetchAndSaveWeatherData(String city, boolean checkAlerts) {
         Map<String, Object> response = restTemplate.getForObject(API_URL, Map.class, city, apiKey);
 
         if (response != null) {
@@ -66,7 +66,9 @@ public class WeatherService {
 
             weatherDataRepository.save(weatherData);
 
-            alertService.checkForAlerts(city, tempCelsius,"C");
+            if (checkAlerts) {
+                alertService.checkForAlerts(city, tempCelsius, "C");
+            }
         }
     }
 

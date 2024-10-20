@@ -195,7 +195,7 @@ const WeatherSummary = () => {
                                     ? `${dailySummary.minTemperatureCelsius.toFixed(2)}°C`
                                     : `${dailySummary.minTemperatureFahrenheit.toFixed(2)}°F`}
                                 </p>
-                                <p>Condition: {dailySummary.dominantCondition}</p>
+                                <p>Dominant Condition: {dailySummary.dominantCondition}</p>
                             </div>
                         </div>
                     )}

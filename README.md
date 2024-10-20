@@ -33,6 +33,7 @@ The project is divided into two main components:
    CHAT_ID=YourChatId
    ```
    Note: Telegram bot token and chat ID are optional. Only add if you want alerts in Telegram.
+
     <details>
     <summary>Click here to check how to get the API Keys</summary>
    
@@ -40,6 +41,8 @@ The project is divided into two main components:
     - For setting up a Telegram bot and obtaining the bot token, use https://t.me/BotFather
     - To get your Telegram chat ID, use https://t.me/chatIDrobot
    </details>
+
+   Note: If you are using Telegram Bot then send the bot you made a Message else you won't receive Notification
 3. Database Setup:
     - Option 1: Use Docker
       Run the following command to start the MySQL database:
@@ -76,11 +79,11 @@ The project is divided into two main components:
    npm start
    ```
    
-# Project Demo
+# Project Demo images
 <details>
 <summary>Click here to check project Demo</summary>
 
-![img.png](img.png)![img_1.png](img_1.png)![img_2.png](img_2.png)![img_3.png](img_3.png)
+![img.png](img.png)![img_1.png](img_1.png)![img_4.png](img_4.png)![img_2.png](img_2.png)![img_3.png](img_3.png)
 
 </details>
 
@@ -89,7 +92,7 @@ The project is divided into two main components:
 <details>
 <summary>Database: Why MySQL?</summary>
 
-I went with MySQL for a few simple reasons. First off, it's free and open-source, which is always a plus. But more importantly, it's perfect for what we're doing with weather data. Think about it - we're constantly saving temperatures, conditions, and timestamps for different cities. MySQL handles this kind of structured data really well.
+Think about it - we're constantly saving temperatures, conditions, and timestamps for different cities. MySQL handles this kind of structured data really well.
 
 I could have used MongoDB or PostgreSQL, but MySQL just made more sense here. It's super easy to set up, works great with Spring Boot (which I was already using), and most developers are familiar with it. Plus, when I need to pull out weather history or calculate daily averages, MySQL's query capabilities make this really straightforward.
 </details>

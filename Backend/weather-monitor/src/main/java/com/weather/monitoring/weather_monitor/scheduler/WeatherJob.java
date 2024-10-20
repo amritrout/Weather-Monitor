@@ -16,7 +16,7 @@ public class WeatherJob implements Job {
         String[] cities = {"Delhi", "Mumbai", "Chennai", "Bangalore", "Kolkata", "Hyderabad"};
 
         for (String city : cities) {
-            weatherService.fetchAndSaveWeatherData(city);
+            weatherService.fetchAndSaveWeatherData(city,true);
             System.out.println("Weather data for " + city + " fetched and saved.");
         }
     }
