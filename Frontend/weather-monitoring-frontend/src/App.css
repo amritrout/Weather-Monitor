@@ -1,20 +1,18 @@
-/* App.css */
-
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f8ff; /* Light background for contrast */
+  background-color: #f0f8ff;
   margin: 0;
   padding: 20px;
 }
 
 h1 {
   text-align: center;
-  color: #333; /* Darker color for headings */
+  color: #333;
 }
 
 h2 {
   margin-top: 30px;
-  color: #0056b3; /* Different color for section headings */
+  color: #0056b3;
 }
 
 .container {
@@ -22,8 +20,8 @@ h2 {
   margin: 0 auto;
   padding: 20px;
   border-radius: 8px;
-  background-color: #ffffff; /* White background for cards */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 form {
@@ -31,26 +29,26 @@ form {
   flex-direction: column;
   margin-bottom: 20px;
   padding: 15px;
-  background-color: #e9ecef; /* Light gray background for the form */
+  background-color: #e9ecef;
   border-radius: 8px;
 }
 
 input {
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #ced4da; /* Border color */
+  border: 1px solid #ced4da;
   border-radius: 5px;
   font-size: 16px;
 }
 
 input:focus {
-  border-color: #0056b3; /* Change border color on focus */
-  outline: none; /* Remove default outline */
+  border-color: #0056b3;
+  outline: none;
 }
 
 button {
   padding: 10px;
-  background-color: #007bff; /* Bootstrap primary color */
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -59,7 +57,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3; /* Darker shade on hover */
+  background-color: #0056b3;
 }
 
 ul {
@@ -73,17 +71,17 @@ li {
   align-items: center;
   margin: 10px 0;
   padding: 10px;
-  background-color: #f8f9fa; /* Light background for list items */
+  background-color: #f8f9fa;
   border-radius: 5px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 li button {
-  background-color: #dc3545; /* Danger color for delete button */
+  background-color: #dc3545;
 }
 
 li button:hover {
-  background-color: #c82333; /* Darker shade on hover */
+  background-color: #c82333;
 }
 
 .alerts-section {
@@ -96,21 +94,6 @@ li button:hover {
 
 .history-section {
   margin-top: 30px;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
-
-  .container {
-    padding: 10px;
-  }
-
-  input, button {
-    font-size: 14px; /* Slightly smaller font for mobile */
-  }
 }
 
 .popup {
@@ -130,4 +113,26 @@ li button:hover {
 
 .popup button {
   margin-top: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+}
+
+.header h1 {
+  padding-top: 20px;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.supported-cities {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 0.9rem;
+  color: gray;
 }

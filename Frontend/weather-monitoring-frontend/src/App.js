@@ -1,5 +1,3 @@
-// src/App.js
-
 import React, { useState, useEffect } from 'react';
 import WeatherSummary from './components/WeatherSummary';
 import Alerts from './components/Alerts';
@@ -55,16 +53,21 @@ function App() {
 
     return (
         <div className="container">
-            <h1>Weather Monitoring Dashboard</h1>
+            <div className="header">
+                <h1>Weather Monitoring Dashboard</h1>
+                <div className="supported-cities">
+                    Supported Cities: Delhi, Mumbai, Chennai, Bangalore, Kolkata, Hyderabad
+                    <br />
+                    Current Temperature can be fetched for any city in the world.
+                </div>
+            </div>
 
             <div>
                 <WeatherSummary/>
-
                 <Alerts/>
                 <hr/>
 
                 {/* Current Weather Section */}
-
                 <CurrentWeather weatherData={currentWeatherData}/> {/* Pass the current weather data */}
                 <hr/>
 
