@@ -83,6 +83,43 @@ Clone the Repository
    ```
    npm start
    ```
+
+# Weather-Monitor Scheduler Configuration
+
+Initially, the `DailySummaries` database will be empty, and the application is set to update the
+database at 11:50 PM every day. Therefore, at the start, the frontend will not show any data. To
+address this and calculate the daily summary up to the current point, you can modify the scheduling
+interval to more frequent updates for testing.
+### Scheduler Update
+In the file
+`src/main/java/com/weather/monitoring/weather_monitor/scheduler/QuartzSchedulerConfig.java`,
+update the following triggers:
+#### Weather Trigger
+(Currently set to update every 5 minutes):
+```java
+Trigger weatherTrigger = TriggerBuilder.newTrigger()
+ .withIdentity("weatherTrigger", "group1")
+ .startNow()
+ .withSchedule(SimpleScheduleBuilder.simpleSchedule()
+ .withIntervalInMinutes(5)) // Change this to 1 or 2 minutes for testing
+ .repeatForever())
+ .build();
+```
+You can set the `withIntervalInMinutes(1)` or `withIntervalInMinutes(2)` for more frequent updates
+during testing.
+#### Summary Trigger
+(Set to update at 11:50 PM):
+```java
+Trigger summaryTrigger = TriggerBuilder.newTrigger()
+ .withIdentity("summaryTrigger", "group2")
+ .withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(23, 50)) // Set this closer to current
+time for testing
+ .build();
+```
+Adjust the `dailyAtHourAndMinute()` values to match a time close to your current time if you'd like to
+calculate the daily summary up to this point during testing.
+By setting these intervals to a smaller time frame, you'll be able to observe the summary and
+weather updates more frequently in the frontend during development and testing.
    
 # Project Demo images
 <details>
